@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init (example)
+        working-directory: examples/minimal
+        run: terraform init -backend=false
+
+      - name: Terraform validate (example)
+        working-directory: examples/minimal
+        run: terraform validate
